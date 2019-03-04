@@ -26,4 +26,6 @@ public class BlackJack {
        
        jda.addEventListener(new Commands());
 	}
+	
+	// yeh
 }
