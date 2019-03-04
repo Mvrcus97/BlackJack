@@ -25,6 +25,9 @@ public class BlackJack {
        jda.getPresence().setGame(Game.playing("BlackJack"));
        
        jda.addEventListener(new Commands());
+       
+       
+       Deck deck = new Deck();
 	}
 	
 	// yeh
