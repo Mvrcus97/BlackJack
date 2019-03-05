@@ -27,8 +27,10 @@ public class BlackJack {
        jda.addEventListener(new Commands());
        
        
-       Deck deck = new Deck();
+      BlackJackTable table = new BlackJackTable();
+      
 	}
 	
 	// yeh
 }
+ 
