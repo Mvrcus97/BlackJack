@@ -6,6 +6,8 @@ import net.dv8tion.jda.core.JDA;
 import net.dv8tion.jda.core.JDABuilder;
 import net.dv8tion.jda.core.OnlineStatus;
 import net.dv8tion.jda.core.entities.Game;
+import net.dv8tion.jda.core.events.message.guild.GuildMessageReceivedEvent;
+import net.dv8tion.jda.core.hooks.ListenerAdapter;
 
 public class BlackJack {
 	
@@ -27,7 +29,7 @@ public class BlackJack {
        jda.addEventListener(new Commands());
        
        
-      BlackJackTable table = new BlackJackTable();
+  
       
 	}
 	

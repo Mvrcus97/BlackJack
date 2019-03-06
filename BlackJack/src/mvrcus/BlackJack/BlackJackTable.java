@@ -1,27 +1,54 @@
 package mvrcus.BlackJack;
 
+import java.util.ArrayList;
+
 public class BlackJackTable {
+	Deck deck;
+	int players;
+	ArrayList<CardHand> cardHands;
+	CardHand dealerHand;	
 	
 	
-	public BlackJackTable() {
-		Deck deck = new Deck(8);
-		int players = 2;
+	public BlackJackTable(int players, int decks) {
+		this.players = players;
+		this.deck = new Deck(decks);
+		this.cardHands = new ArrayList<CardHand>();
 		
-		CardHand hand1 = new CardHand(deck.pullCard());
-		CardHand hand2 = new CardHand(deck.pullCard());
-		hand1.addCard(deck.pullCard());
-		hand1.addCard(deck.pullCard());
-		hand1.addCard(deck.pullCard());
-		
-		
-		hand2.addCard(deck.pullCard());
-		hand2.addCard(deck.pullCard());
-		
-		System.out.println("Hand 1 sum: " + hand1.getSum().toString());
-		System.out.println("Hand 2 sum: " + hand2.getSum().toString());
-		System.out.println("Hand 1 cards: " + hand1.toString());
-		System.out.println("Hand 2 cards: " + hand2.toString());
-		
+		beginRound();
+		System.out.println("\nBEGINNING ROUND...");		
 	}
 
-}
+	/* Begin round by dealing one card per player, followed by one
+	 * card to dealer. Deal one extra card per player and finally one more (hidden) 
+	 * card for the dealer. 
+	 */
+	private void beginRound() {
+		//Create a cardHand per player. 
+		for(int i = 0; i<players; i++) {
+			cardHands.add(new CardHand(deck.pullCard()));
+		}
+		dealerHand = new DealerHand(deck.pullCard());
+		for( CardHand hand : cardHands) {
+			hand.addCard(deck.pullCard());
+		}
+		dealerHand.addCard(deck.pullCard());
+	}//end beginRound
+	
+	
+	public void hitPlayer(int id) {cardHands.get(id-1).addCard(deck.pullCard());}
+	public void hitDealer() {dealerHand.addCard(deck.pullCard());}
+	public void getPlayerSum(int id) {cardHands.get(id-1).getSum();}
+	public void getDealerSum() {dealerHand.getSum();}
+	
+	
+	public String toString() {
+		StringBuilder round = new StringBuilder();
+		for(int i = 0; i < players; i++) { 
+			round.append("Player ").append(i+1).append(": ").append(cardHands.get(i).getSum());
+			round.append("\n");
+		}
+		round.append("Dealer hand: ").append(dealerHand.getSum());
+		return round.toString();
+	}
+
+}// end BlackJackTable
