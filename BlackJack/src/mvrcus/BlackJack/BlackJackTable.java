@@ -37,18 +37,34 @@ public class BlackJackTable {
 	
 	public void hitPlayer(int id) {cardHands.get(id-1).addCard(deck.pullCard());}
 	public void hitDealer() {dealerHand.addCard(deck.pullCard());}
-	public void getPlayerSum(int id) {cardHands.get(id-1).getSum();}
+	public void getPlayerSum(int id) {cardHands.get(id-1).toString();}
 	public void getDealerSum() {dealerHand.getSum();}
 	
 	
 	public String toString() {
 		StringBuilder round = new StringBuilder();
 		for(int i = 0; i < players; i++) { 
-			round.append("Player ").append(i+1).append(": ").append(cardHands.get(i).getSum());
+			round.append("Player ").append(i+1).append(": ").append(cardHands.get(i).toString());
+			round.append(" sum is: ").append(cardHands.get(i).getSum());
 			round.append("\n");
 		}
 		round.append("Dealer hand: ").append(dealerHand.getSum());
 		return round.toString();
 	}
+	
+	
+	public CardHand getCardHand(int n) { 
+		if( n >= cardHands.size()) return null;
+		return this.cardHands.get(n);
+		
+		
+	}
+	
+	
+	
+	
+	
+	
+	
 
 }// end BlackJackTable

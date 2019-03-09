@@ -74,7 +74,6 @@ public class Deck {
 		}
 		
 		public int getNum() {return this.num;}
-		
 		public String getType() {return this.type;}
 	}// end Card. 
 

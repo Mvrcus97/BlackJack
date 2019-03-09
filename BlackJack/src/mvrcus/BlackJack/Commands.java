@@ -1,5 +1,8 @@
 package mvrcus.BlackJack;
 
+import java.io.IOException;
+
+import mvrcus.BlackJack.ImageFunctions.imageFunctions;
 import net.dv8tion.jda.core.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.core.hooks.ListenerAdapter;
 
@@ -17,16 +20,15 @@ public class Commands extends ListenerAdapter {
 		
 		
 		if (args[0].equalsIgnoreCase(BlackJack.prefix + "play")){
-			if(args.length < 2 || new Integer(args[1]) < 1 || new Integer(args[1]) > 10) {
-				event.getChannel().sendTyping().queue();
-				event.getChannel().sendMessage("Usage - !play [1-10]").queue(); 
-			}else {
-				game = new BlackJackGame(new Integer(args[1]),8);
-			    String round = game.toString();
-				
-				event.getChannel().sendTyping().queue();
-				event.getChannel().sendMessage(round).queue(); 
+			initializeGame(args, event);
+			try {
+				imageFunctions.drawPlayerHand(game.getCardHand(0), 1);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
 			}
+			
+			//playerInput(args, event);
 		}
 		
 		if (args[0].equalsIgnoreCase(BlackJack.prefix + "show")){
@@ -42,4 +44,28 @@ public class Commands extends ListenerAdapter {
 		}
 	
 	}
+	
+	
+	
+	
+	
+
+
+
+	/*  This methods begins a game of blackjack by dealing to each player, 
+	 *  
+	 */
+	private void initializeGame(String[] args, GuildMessageReceivedEvent event) {
+		if(args.length < 2 || new Integer(args[1]) < 1 || new Integer(args[1]) > 10) {
+			event.getChannel().sendTyping().queue();
+			event.getChannel().sendMessage("Usage - !play [1-10]").queue(); 
+		}else {
+			game = new BlackJackGame(new Integer(args[1]),8);
+		    String round = game.toString();
+			
+			event.getChannel().sendTyping().queue();
+			event.getChannel().sendMessage(round).queue(); 
+			event.getChannel().sendMessage("!h or !s").queue();
+		}
+	}// End initializeGame
 }

@@ -28,14 +28,53 @@ public class CardHand {
 		
 		return res;
 	}
+	
+	
+	public int getNumCards() { return this.list.size();}
+	
 	public String toString() {
 		StringBuilder cards = new StringBuilder();
+		int digit;
+		String digit_s;
 		for(Card c : list) {
-			cards.append(c.getType()).append(" ");
-			cards.append(c.getNum()).append(", ");
+			digit = c.getNum();
+			digit_s = "" + digit;
+			if(digit > 10) {
+				if(digit == 11) digit_s = "jack";
+				else if(digit == 12) digit_s = "queen";
+				else if(digit == 13) digit_s = "king";
+				else if(digit == 14) digit_s = "ace";
+			}
+			cards.append(digit_s).append("_of_");
+			cards.append(c.getType()).append(", ");
 		}
 		return cards.toString();
-	}
+	}// end toString
+	
+	
+	public String[] toStringArray() {
+		String[] res = new String[list.size()];
+		StringBuilder card = new StringBuilder();
+		int digit;
+		int index = 0;
+		String digit_s;
+		for(Card c : list) {
+			digit = c.getNum();
+			digit_s = "" + digit;
+			if(digit > 10) {
+				if(digit == 11) digit_s = "jack";
+				else if(digit == 12) digit_s = "queen";
+				else if(digit == 13) digit_s = "king";
+				else if(digit == 14) digit_s = "ace";
+			}
+			card.append(digit_s).append("_of_");
+			card.append(c.getType());
+			res[index] = card.toString();
+			index ++;
+			card = new StringBuilder();
+		}
+		return res; 
+	}// end toStringArray
 	
 	// Update total sum, J,Q,K = 10. A = 1 and 11. 
 	public void updateSum(int x) {
