@@ -54,7 +54,10 @@ public class BlackJackTable {
 	
 	
 	public CardHand getCardHand(int n) { 
-		if( n >= cardHands.size()) return null;
+		if( n >= cardHands.size()) {
+			System.out.println("Error getCardHand()");
+			return null;
+		}
 		return this.cardHands.get(n);
 		
 		

@@ -69,6 +69,7 @@ public class CardHand {
 			}
 			card.append(digit_s).append("_of_");
 			card.append(c.getType());
+			//if(digit > 10) card.append("2"); This line to use "retro" pics. 
 			res[index] = card.toString();
 			index ++;
 			card = new StringBuilder();

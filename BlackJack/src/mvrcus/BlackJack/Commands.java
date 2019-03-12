@@ -1,8 +1,12 @@
 package mvrcus.BlackJack;
 
+import java.io.File;
 import java.io.IOException;
 
 import mvrcus.BlackJack.ImageFunctions.imageFunctions;
+import net.dv8tion.jda.core.MessageBuilder;
+import net.dv8tion.jda.core.entities.Message;
+import net.dv8tion.jda.core.entities.MessageChannel;
 import net.dv8tion.jda.core.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.core.hooks.ListenerAdapter;
 
@@ -28,7 +32,8 @@ public class Commands extends ListenerAdapter {
 				e.printStackTrace();
 			}
 			
-			//playerInput(args, event);
+			sendFile("Generated Picture:", new File("images/output.png"), event);
+			
 		}
 		
 		if (args[0].equalsIgnoreCase(BlackJack.prefix + "show")){
@@ -41,6 +46,23 @@ public class Commands extends ListenerAdapter {
 			
 			event.getChannel().sendTyping().queue();
 			event.getChannel().sendMessage(round).queue(); 
+			sendFile("Generated Picture:", new File("images/output.png"), event);
+			
+		}
+		
+		if (args[0].equalsIgnoreCase(BlackJack.prefix + "h")){
+		    if(game == null) {
+		    	event.getChannel().sendTyping().queue();
+				event.getChannel().sendMessage("Please start a game first!").queue();
+				event.getChannel().sendMessage("Start a game with '!play'").queue();
+		    }
+		    game.hitPlayer(1);
+		    try {
+				imageFunctions.drawPlayerHand(game.getCardHand(0), 1);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 	
 	}
@@ -68,4 +90,14 @@ public class Commands extends ListenerAdapter {
 			event.getChannel().sendMessage("!h or !s").queue();
 		}
 	}// End initializeGame
+
+	public static void sendFile(String txt, File f, GuildMessageReceivedEvent event) {
+		event.getChannel().sendMessage(txt).addFile(f).queue();
+	}//end sendFile
+
+
+
+
+
+
 }
