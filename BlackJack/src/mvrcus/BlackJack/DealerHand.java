@@ -14,6 +14,7 @@ public class DealerHand extends CardHand{
 	public void showHand() {
 		this.hidden = false;
 	}
+	public boolean isHidden() {return this.hidden;}
 	
 	
 	public String toString() {
@@ -27,19 +28,17 @@ public class DealerHand extends CardHand{
 	
 	
 	//Override for dealer
-	public String getSum() {
-		//Currently returning a string. TODO
-		String res;
+	public int getSum() {
+		int res;
 		if(hidden) {
 			int tmp = list.get(0).getNum();
 			if(tmp> 10 && tmp < 14) {
-				res = "10";
+				res = 10;
 			}else if(tmp == 14) {
-				res = "11 or 1";
+				res = 11;
 			}else {
-				res =  Integer.toString(tmp);
+				res =  tmp;
 			}
-			res += " and a hidden card.";
 		}else {
 			res = super.getSum();
 		}

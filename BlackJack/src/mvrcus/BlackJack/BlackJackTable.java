@@ -6,7 +6,7 @@ public class BlackJackTable {
 	Deck deck;
 	int players;
 	ArrayList<CardHand> cardHands;
-	CardHand dealerHand;	
+	DealerHand dealerHand;	
 	
 	
 	public BlackJackTable(int players, int decks) {
@@ -35,11 +35,11 @@ public class BlackJackTable {
 	}//end beginRound
 	
 	
-	public void hitPlayer(int id) {cardHands.get(id-1).addCard(deck.pullCard());}
+	public void hitPlayer(int id) {cardHands.get(id).addCard(deck.pullCard());}
 	public void hitDealer() {dealerHand.addCard(deck.pullCard());}
-	public void getPlayerSum(int id) {cardHands.get(id-1).toString();}
-	public void getDealerSum() {dealerHand.getSum();}
-	
+	public int getPlayerSum(int id) {return cardHands.get(id).getSum();}
+	public int getDealerSum() {return dealerHand.getSum();}
+	public void showDealer() {dealerHand.showHand();}
 	
 	public String toString() {
 		StringBuilder round = new StringBuilder();
@@ -60,7 +60,10 @@ public class BlackJackTable {
 		}
 		return this.cardHands.get(n);
 		
-		
+	}
+	
+	public DealerHand getDealerHand() {
+		return this.dealerHand; 
 	}
 	
 	

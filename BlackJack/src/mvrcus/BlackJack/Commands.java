@@ -26,13 +26,13 @@ public class Commands extends ListenerAdapter {
 		if (args[0].equalsIgnoreCase(BlackJack.prefix + "play")){
 			initializeGame(args, event);
 			try {
-				imageFunctions.drawPlayerHand(game.getCardHand(0), 1);
+				imageFunctions.drawHand(game.getDealerHand(), game.getCardHand(0));
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 			
-			sendFile("Generated Picture:", new File("images/output.png"), event);
+			sendFile(null, new File("images/output.png"), event);
 			
 		}
 		
@@ -56,15 +56,75 @@ public class Commands extends ListenerAdapter {
 				event.getChannel().sendMessage("Please start a game first!").queue();
 				event.getChannel().sendMessage("Start a game with '!play'").queue();
 		    }
-		    game.hitPlayer(1);
+		    
 		    try {
-				imageFunctions.drawPlayerHand(game.getCardHand(0), 1);
-			} catch (IOException e) {
+		    	game.hitNext();
+				imageFunctions.drawHand(game.getDealerHand(), game.getCardHand(0));
+				sendFile("You chose to HIT!", new File("images/output.png"),event);
+				if(game.getPlayerSum(0) == -1) {
+					event.getChannel().sendMessage("You Lost...").queue();
+					event.getChannel().sendMessage("Start a new game with '!play'").queue();
+					//Show Dealers' hidden card. 
+					Thread.sleep(3500);
+					game.standNext();
+			    	imageFunctions.drawHand(game.getDealerHand(), game.getCardHand(0));
+				    sendFile("Let's see what the dealer got...", new File("images/output.png"),event);
+					//TODO game.reset();
+				}
+			} catch (Exception e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
 	
+		
+		
+		
+		if (args[0].equalsIgnoreCase(BlackJack.prefix + "s")){
+		    if(game == null) {
+		    	event.getChannel().sendTyping().queue();
+				event.getChannel().sendMessage("Please start a game first!").queue();
+				event.getChannel().sendMessage("Start a game with '!play'").queue();
+		    }
+		    
+		    try {
+				imageFunctions.drawHand(game.getDealerHand(), game.getCardHand(0));// Draw HiddenCard
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		    
+		  
+		    
+		    //TODO now shows dealers hand instant after player 1. FIX check if all players done.
+		    try {
+		    	game.standNext();
+		    	imageFunctions.drawHand(game.getDealerHand(), game.getCardHand(0)); //Draw ShowCard
+			    sendFile("You chose to STAND!", new File("images/output.png"),event);
+			    Thread.sleep(3500);
+			    int dealerDone = game.dealerTurn();
+			    while(dealerDone != 1) {
+			    	System.out.println("WHILE: dealderDone = " + dealerDone);
+			    	imageFunctions.drawHand(game.getDealerHand(), game.getCardHand(0));
+					sendFile("Dealer must Hit!", new File("images/output.png"),event);
+					Thread.sleep(3500);
+					dealerDone = game.dealerTurn();
+				
+			    }
+			    String winner = "PUSH";
+			    if(game.getPlayerSum(0) > game.getDealerSum()) winner = "Player"; 
+			    else if(game.getPlayerSum(0) < game.getDealerSum()) winner = "Dealer"; 
+			    event.getChannel().sendMessage("Winner is: " +winner + "!").queue();
+			    
+			} catch (Exception e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+		}
+	
+		
+		
+		
 	}
 	
 	
@@ -83,16 +143,26 @@ public class Commands extends ListenerAdapter {
 			event.getChannel().sendMessage("Usage - !play [1-10]").queue(); 
 		}else {
 			game = new BlackJackGame(new Integer(args[1]),8);
-		    String round = game.toString();
-			
 			event.getChannel().sendTyping().queue();
-			event.getChannel().sendMessage(round).queue(); 
-			event.getChannel().sendMessage("!h or !s").queue();
+			event.getChannel().sendMessage("[!h]it or [!s]tand").queue();
 		}
 	}// End initializeGame
 
-	public static void sendFile(String txt, File f, GuildMessageReceivedEvent event) {
-		event.getChannel().sendMessage(txt).addFile(f).queue();
+	
+	/* Send a file to chat with specified message. 
+	 *  Also include player score and dealer score. 
+	 */
+	public void sendFile(String txt, File f, GuildMessageReceivedEvent event) {
+		int playerSum = game.getPlayerSum(0);
+		int dealerSum = game.getDealerSum();
+		String playerString = "" + playerSum;
+		String dealerString = "" + dealerSum;
+		if(dealerSum == -1) dealerString = "BUST!";
+		if(playerSum == -1) playerString = "BUST!";
+		if(txt!=null) event.getChannel().sendMessage(txt).queue();
+		
+		event.getChannel().sendMessage("Dealer score: " + game.getDealerSum()).addFile(f).queue();
+		event.getChannel().sendMessage("Player score: " + playerString).queue();
 	}//end sendFile
 
 

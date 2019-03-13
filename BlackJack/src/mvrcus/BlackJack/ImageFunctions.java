@@ -15,17 +15,17 @@ import mvrcus.BlackJack.ImageFunctions.imageFunctions;
 public class ImageFunctions {
 	public static class imageFunctions{
 		
-		public static void drawPlayerHand(CardHand ch, int n) throws IOException {
+		public static void drawPlayerHand(CardHand ch, BufferedImage tableImg) throws IOException {
+			System.out.println("--draw player hand--");
 			String[] cards = ch.toStringArray();
 			File f;
 			int hSpaceSize = 75;
 			BufferedImage cardImg;
-			BufferedImage tableImg = ImageIO.read(new File("images/table1.jpg"));
 			for( int i = 0; i < cards.length; i++) {
 				System.out.println(" import path: images/"+cards[i]+".png");
 				f = new File("images/"+cards[i]+".png");
 				cardImg = ImageIO.read(f);
-				tableImg = imageFunctions.drawCardOnTable(cardImg, tableImg, (500 - i*hSpaceSize), 385, 150);
+				tableImg = imageFunctions.drawCardOnTable(cardImg, tableImg, (415 + i*hSpaceSize), 385, 150);
 				
 			}
 		    File fo = new File("images/output.png");
@@ -34,9 +34,29 @@ public class ImageFunctions {
 		}
 		
 		
-
 		
-		
+		public static void drawHand(DealerHand dh, CardHand ph) throws IOException {
+			System.out.println("--draw entire hand--");
+			boolean hidden = dh.isHidden();
+			
+			String[] cardsD = dh.toStringArray();
+			String[] cardsP = ph.toStringArray();
+			File f1,f2;
+			int hSpaceSize = 108;
+			BufferedImage cardImg;
+			BufferedImage tableImg = ImageIO.read(new File("images/output.png"));
+			//Draw Dealer Hand. 
+			for( int i = 0; i < cardsD.length; i++) {
+				System.out.println(" import path: images/"+cardsD[i]+".png");
+				if(i == 1 && hidden) f1 = new File("images/card_back_black.png");
+				
+				else f1 = new File("images/"+cardsD[i]+".png");
+				cardImg = ImageIO.read(f1);
+				tableImg = imageFunctions.drawCardOnTable(cardImg, tableImg, (500 - i*hSpaceSize), 45, 150);
+			}
+			//Draw Player Hand. 
+			imageFunctions.drawPlayerHand(ph, tableImg);
+		}//end drawHand
 		
 		
 		
@@ -96,5 +116,7 @@ public class ImageFunctions {
 		
 		
 	}
+
+
 
 }

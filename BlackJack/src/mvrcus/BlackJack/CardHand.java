@@ -19,13 +19,8 @@ public class CardHand {
 		updateSum(c.getNum());
 	}
 	
-	public String getSum() {
-		String res = Integer.toString(sum[0]);
-		if(sum[0] != sum[1] ) {
-			res += " or " + sum[1];
-		}
-		
-		
+	public int getSum() {
+		int res = sum[0];
 		return res;
 	}
 	
