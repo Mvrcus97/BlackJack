@@ -23,7 +23,6 @@ public class Bank{
 	public Bank(String filename){
 		this.file = new File(filename);
 	}
-
 	public void addPersonAndValue(String id, int ammount) throws IOException{
 		this.writer = new BufferedWriter(new FileWriter(this.file, true));
 		String temp = id + " " + Integer.toString(ammount);
@@ -31,7 +30,6 @@ public class Bank{
 		writer.newLine();
 		writer.close();
 	}
-
 	public int returnValueFromFile(String id) throws IOException{
 		Scanner scanner = new Scanner(file);
 		String pattern = String.format("(%s)\\s{1}(\\d+)", id);
@@ -48,16 +46,14 @@ public class Bank{
 		}
 		return 0;
 	}
-
 	public void updateValueForId(String id, int value) throws IOException{
 		String pattern = String.format("(%s)\\s{1}(-*\\d+)", id);
 		Pattern patternObject = Pattern.compile(pattern);
 		ArrayList<String> fileContent = new ArrayList<>(Files.readAllLines(path, StandardCharsets.UTF_8));
-
 		for(int i = 0; i < fileContent.size(); i++){
 			Matcher m = patternObject.matcher(fileContent.get(i));
 			if(m.find()){
-				System.out.println("FOUND!");
+				//System.out.println("FOUND!");
 				int newValue = Integer.parseInt(m.group(2)) + value;
 				String newString = String.format("%s %d",m.group(1), newValue);
 				fileContent.set(i, newString);
@@ -65,17 +61,6 @@ public class Bank{
 			}
 		}
 		Files.write(path, fileContent, StandardCharsets.UTF_8);
-
-
-
-
-
 	}
-
-	
-
-
-
-	
 }
 
