@@ -1,0 +1,9 @@
+ID  MONEY
+asd 10
+dsa 12
+Andre 500
+sda 13
+asd 14
+das 15
+sad 16
+Marcus 250
